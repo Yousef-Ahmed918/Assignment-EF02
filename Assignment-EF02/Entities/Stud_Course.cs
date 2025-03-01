@@ -8,8 +8,11 @@ namespace Assignment_EF02.Entities
 {
     internal class Stud_Course
     {
-        public int Stud_ID { get; set; }
-        public int Course_ID { get; set; }
         public int Grade { get; set; }
+         public Student Student { get; set; }
+        public int StudentId { get; set; }
+        public Course Course { get; set; }
+        public int CourseId { get; set; }
+
     }
 }

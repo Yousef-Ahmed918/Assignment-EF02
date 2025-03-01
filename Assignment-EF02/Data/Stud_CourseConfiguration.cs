@@ -14,19 +14,16 @@ namespace Assignment_EF02.Data
     {
         public void Configure(EntityTypeBuilder<Stud_Course> builder)
         {
-            builder.Property(s => s.Stud_ID)
-                .HasColumnName("Stud_ID")
+            builder.Property(s => s.StudentId)
                 .HasColumnType("int");
 
-            builder.Property(s => s.Course_ID)
-                .HasColumnName("Course_ID")
+            builder.Property(s => s.CourseId)
                 .HasColumnType("int");
 
             builder.Property(s => s.Grade)
-                .HasColumnName("Grade")
                 .HasColumnType("int");
 
-            builder.HasKey(k => new { k.Stud_ID, k.Course_ID });
+            builder.HasKey(k => new { k.StudentId, k.CourseId });
 
         }
     }

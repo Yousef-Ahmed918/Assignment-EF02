@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Assignment_EF02.Data.Migrations
+namespace Assignment_EF02.Migrations
 {
     [DbContext(typeof(ITIDB))]
-    [Migration("20250227095727_MigrationAddStud_Course")]
-    partial class MigrationAddStud_Course
+    [Migration("20250301213917_InstDeptRelation")]
+    partial class InstDeptRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,12 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<int>("Top_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TopicId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TopicId");
 
                     b.ToTable("Course");
                 });
@@ -63,9 +68,6 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<string>("Evaluate")
                         .HasMaxLength(30)
                         .HasColumnType("varchar");
-
-                    b.Property<int>("inst_ID")
-                        .HasColumnType("int");
 
                     b.HasKey("Inst_ID", "Course_ID");
 
@@ -86,11 +88,18 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<int>("Ins_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManagerId")
+                        .IsUnique()
+                        .HasFilter("[ManagerId] IS NOT NULL");
 
                     b.ToTable("Departments");
                 });
@@ -110,6 +119,9 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<int>("Bouns")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Dept_Id")
                         .HasColumnType("int");
 
@@ -126,22 +138,21 @@ namespace Assignment_EF02.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.ToTable("Instructor");
                 });
 
             modelBuilder.Entity("Assignment_EF02.Entities.Stud_Course", b =>
                 {
                     b.Property<int>("Stud_ID")
-                        .HasColumnType("int")
-                        .HasColumnName("Stud_ID");
+                        .HasColumnType("int");
 
                     b.Property<int>("Course_ID")
-                        .HasColumnType("int")
-                        .HasColumnName("Course_ID");
+                        .HasColumnType("int");
 
                     b.Property<int>("Grade")
-                        .HasColumnType("int")
-                        .HasColumnName("Grade");
+                        .HasColumnType("int");
 
                     b.HasKey("Stud_ID", "Course_ID");
 
@@ -159,10 +170,10 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("Dep_Id")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("FName")
@@ -173,6 +184,8 @@ namespace Assignment_EF02.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Students");
                 });
@@ -191,6 +204,59 @@ namespace Assignment_EF02.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("topics");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Course", b =>
+                {
+                    b.HasOne("Assignment_EF02.Entities.Topic", "Topic")
+                        .WithMany("Courses")
+                        .HasForeignKey("TopicId");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Department", b =>
+                {
+                    b.HasOne("Assignment_EF02.Entities.Instructor", "Manager")
+                        .WithOne("ManageDepartment")
+                        .HasForeignKey("Assignment_EF02.Entities.Department", "ManagerId");
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Instructor", b =>
+                {
+                    b.HasOne("Assignment_EF02.Entities.Department", "Department")
+                        .WithMany("Instructors")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Student", b =>
+                {
+                    b.HasOne("Assignment_EF02.Entities.Department", "Department")
+                        .WithMany("students")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Department", b =>
+                {
+                    b.Navigation("Instructors");
+
+                    b.Navigation("students");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Instructor", b =>
+                {
+                    b.Navigation("ManageDepartment");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Topic", b =>
+                {
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

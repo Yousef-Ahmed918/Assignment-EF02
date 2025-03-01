@@ -10,5 +10,8 @@ namespace Assignment_EF02.Entities
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+
+        //One to many RelationShip
+        public ICollection<Course> Courses { get; set; } = new HashSet<Course>();
     }
 }

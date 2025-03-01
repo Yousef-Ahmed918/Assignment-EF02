@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Assignment_EF02.Data.Migrations
+namespace Assignment_EF02.Migrations
 {
     [DbContext(typeof(ITIDB))]
-    [Migration("20250227093118_MigrationAddInstrctor")]
-    partial class MigrationAddInstrctor
+    [Migration("20250301203633_StudentDepRelation")]
+    partial class StudentDepRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,23 @@ namespace Assignment_EF02.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Course");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Course_Inst", b =>
+                {
+                    b.Property<int>("Inst_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Course_ID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Evaluate")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar");
+
+                    b.HasKey("Inst_ID", "Course_ID");
+
+                    b.ToTable("Course_Inst");
                 });
 
             modelBuilder.Entity("Assignment_EF02.Entities.Department", b =>
@@ -109,6 +126,22 @@ namespace Assignment_EF02.Data.Migrations
                     b.ToTable("Instructor");
                 });
 
+            modelBuilder.Entity("Assignment_EF02.Entities.Stud_Course", b =>
+                {
+                    b.Property<int>("Stud_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Course_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.HasKey("Stud_ID", "Course_ID");
+
+                    b.ToTable("Stud_Course");
+                });
+
             modelBuilder.Entity("Assignment_EF02.Entities.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -120,10 +153,10 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("Dep_Id")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("FName")
@@ -134,6 +167,8 @@ namespace Assignment_EF02.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Students");
                 });
@@ -152,6 +187,20 @@ namespace Assignment_EF02.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("topics");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Student", b =>
+                {
+                    b.HasOne("Assignment_EF02.Entities.Department", "Department")
+                        .WithMany("students")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Department", b =>
+                {
+                    b.Navigation("students");
                 });
 #pragma warning restore 612, 618
         }

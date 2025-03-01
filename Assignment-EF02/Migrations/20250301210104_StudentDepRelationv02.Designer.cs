@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Assignment_EF02.Data.Migrations
+namespace Assignment_EF02.Migrations
 {
     [DbContext(typeof(ITIDB))]
-    [Migration("20250227090658_MigrationAddDepartment")]
-    partial class MigrationAddDepartment
+    [Migration("20250301210104_StudentDepRelationv02")]
+    partial class StudentDepRelationv02
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,23 @@ namespace Assignment_EF02.Data.Migrations
                     b.ToTable("Course");
                 });
 
+            modelBuilder.Entity("Assignment_EF02.Entities.Course_Inst", b =>
+                {
+                    b.Property<int>("Inst_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Course_ID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Evaluate")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar");
+
+                    b.HasKey("Inst_ID", "Course_ID");
+
+                    b.ToTable("Course_Inst");
+                });
+
             modelBuilder.Entity("Assignment_EF02.Entities.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -75,6 +92,56 @@ namespace Assignment_EF02.Data.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("Assignment_EF02.Entities.Instructor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar");
+
+                    b.Property<int>("Bouns")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Dept_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HourRate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Instructor");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Stud_Course", b =>
+                {
+                    b.Property<int>("Stud_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Course_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.HasKey("Stud_ID", "Course_ID");
+
+                    b.ToTable("Stud_Course");
+                });
+
             modelBuilder.Entity("Assignment_EF02.Entities.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -86,10 +153,10 @@ namespace Assignment_EF02.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("Dep_Id")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("FName")
@@ -100,6 +167,8 @@ namespace Assignment_EF02.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Students");
                 });
@@ -118,6 +187,20 @@ namespace Assignment_EF02.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("topics");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Student", b =>
+                {
+                    b.HasOne("Assignment_EF02.Entities.Department", "Department")
+                        .WithMany("students")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Assignment_EF02.Entities.Department", b =>
+                {
+                    b.Navigation("students");
                 });
 #pragma warning restore 612, 618
         }

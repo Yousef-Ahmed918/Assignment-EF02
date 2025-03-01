@@ -12,8 +12,14 @@ namespace Assignment_EF02.Entities
         public required string FName { get; set; }
         public string? LName { get; set; }
         public string? Address { get; set; }
-        public int Age { get; set; }
+        public int? Age { get; set; }
 
-        public int Dep_Id { get; set; }
-    }
+
+        //One to many RelationShip
+        public int? DepartmentId { get; set; } //Navigation Property+(Id Name) in principle Table
+        public Department? Department { get; set; } //Navigation Property
+
+        public ICollection<Stud_Course> Stud_Courses { get; set; } =new HashSet<Stud_Course>();
+    } 
+
 }

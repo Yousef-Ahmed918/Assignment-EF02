@@ -14,7 +14,7 @@ namespace Assignment_EF02.Data
     {
         public void Configure(EntityTypeBuilder<Course_Inst> builder)
         {
-            builder.Property<int>("inst_ID")
+            builder.Property<int>("Inst_ID")
                  .HasColumnType("int");
            
             builder.Property<int>("Course_ID")
@@ -24,7 +24,7 @@ namespace Assignment_EF02.Data
                 .HasColumnType("varchar")
                 .HasMaxLength (30);
 
-            builder.HasKey(table => new { table.Inst_ID, table.Course_ID });
+            builder.HasKey(table => new { table.InstructorId, table.CourseId });
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,31 @@ namespace Assignment_EF02
                 e.Property<int>("Top_Id")
                .HasColumnType("int");
             });
+
+            //Student Department Relation
+            //modelBuilder.Entity<Department>()
+            //    .HasMany(d => d.students)
+            //    .WithOne(e => e.Department)
+            //    .HasForeignKey(e=>e.DepartmentId)
+            //    .IsRequired(false)
+            //    .OnDelete(DeleteBehavior.NoAction); 
+
+            //modelBuilder.Entity<Student>()
+            //    .HasOne(d => d.Department)
+            //    .WithMany(s => s.students);
+
+            //Instructor Department manage Relation
+            //modelBuilder.Entity<Department>()
+            //    .HasOne(i => i.Manager)
+            //    .WithOne(d => d.ManageDepartment)
+            //    .HasForeignKey<Department>(d => d.ManagerId)
+            //    .IsRequired(false);
+
+            //modelBuilder.Entity<Instructor>()
+            //    .HasOne(d=>d.Department)
+            //    .WithOne(i=>i.Manager) 
+            //    .HasForeignKey<Department>(d=>d.ManagerId)
+
             modelBuilder.ApplyConfiguration(new InstructorConfiguration());
             modelBuilder.ApplyConfiguration(new Course_InstConfiguration());
             modelBuilder.ApplyConfiguration(new Stud_CourseConfiguration());
